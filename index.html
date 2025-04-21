@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NewLeaf - Life Matcher</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom, #eafff5, #d0fff1);
+      color: #234f3e;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    h1 {
+      font-size: 32px;
+      color: #2ac179;
+      margin-bottom: 20px;
+    }
+    .description {
+      font-size: 18px;
+      color: #234f3e;
+      margin-bottom: 30px;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+    .start-btn {
+      background-color: #2ac179;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+    .start-btn:hover {
+      background-color: #23a06b;
+    }
+    .carousel {
+      width: 90%;
+      max-width: 440px;
+      min-height: 500px;
+      overflow: hidden;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 30px;
+      background: #ffffff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      padding: 20px 15px;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 5;
+      transition: opacity 0.8s ease;
+    }
+    .slides {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 100%;
+    }
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.4s ease;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { transform: scale(1); opacity: 1; }
+    }
+    h2 {
+      margin: 0;
+      font-weight: 700;
+      color: #2ac179;
+      font-size: 26px;
+      text-align: center;
+    }
+    .question {
+      font-size: 18px;
+      margin: 25px 0 20px;
+      color: #234f3e;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .slider-value-text {
+      font-size: 14px;
+      color: #2a6f4f;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 16px;
+      border-radius: 8px;
+      background: #e0c7a1;
+      outline: none;
+      margin: 5px 0 15px;
+      transition: background 0.3s ease;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #2ac179;
+      cursor: pointer;
+      margin-top: -4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 14px;
+      color: #3d7b5b;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .next-btn, .back-btn {
+      background-color: #2ac179;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 15px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .next-btn:hover, .back-btn:hover {
+      background-color: #23a06b;
+    }
+    .tagline {
+      font-size: 16px;
+      text-align: center;
+      color: #5b8d7a;
+      padding: 20px;
+      background: #ebfff7;
+      margin-top: auto;
+    }
+    .final-options {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .final-options label {
+      display: block;
+      margin: 15px 0;
+      font-size: 18px;
+      color: #234f3e;
+    }
+    .final-options input[type="radio"],
+    .final-options input[type="checkbox"] {
+      margin-right: 10px;
+      accent-color: #2ac179;
+      transform: scale(1.3);
+    }
+    .results {
+      margin: 80px auto 20px;
+      width: 90%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .result-card {
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      animation: popIn 0.6s ease;
+    }
+    .good {
+      background: #e6fff2;
+      border-left: 6px solid #2ac179;
+    }
+    .avoid {
+      background: #f9f0e6;
+      border-left: 6px solid #b56a30;
+    }
+  </style>
+</head>
+
+<body>
+  <img src="/mnt/data/A_2D_digital_illustration_displays_a_survey_modal_.png" class="logo" alt="NewLeaf Logo">
+
+  <div class="main-content" id="homeScreen">
+    <h1>Welcome to New Leaf</h1>
+    <p class="description">
+      Discover cities that match your lifestyle, values, and dreams.  
+      Take our short questionnaire and find your perfect new home!
+    </p>
+    <button class="start-btn" onclick="startQuestionnaire()">Get Started</button>
+  </div>
+
+  <div class="carousel" id="carousel">
+    <div class="slides" id="slides"></div>
+  </div>
+
+  <div id="results" class="results" style="display: none;"></div>
+
+  <div class="tagline">
+    Turn a New Leaf. Discover Your New Home.
+  </div>
+
+<script>
+function startQuestionnaire() {
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('carousel').style.display = 'flex';
+}
+
+const questions = [
+  { title: "Safety", text: "How important is living in a low-crime area to you?" },
+  { title: "Employment", text: "How important is having strong job opportunities nearby?" },
+  { title: "Diversity", text: "How important is living in a diverse and multicultural community?" },
+  { title: "Affordability", text: "How important is affordability and low cost of living?" },
+  { title: "Walkability", text: "How important is being able to walk to shops, restaurants, and parks?" },
+  { title: "Remote Work", text: "How important is access to remote work opportunities?" },
+  { title: "Density", text: "Do you prefer rural, suburban, or urban living?", dualSlider: true },
+  { title: "Politics", text: "Do you prefer a more liberal or conservative political climate?", dualSlider: true }
+];
+
+const sliderTexts = [
+  "Not important at all", "Barely matters", "Slightly important", "Somewhat relevant",
+  "Neutral", "Kind of important", "Pretty important", "Very important", "Extremely important"
+];
+const politicalTexts = [
+  "Very conservative","Conservative","Somewhat conservative","Moderate conservative",
+  "Centrist","Moderate liberal","Somewhat liberal","Liberal","Very liberal"
+];
+const densityTexts = [
+  "Very rural","Mostly rural","Mixed suburban-rural","Suburban","Urban center"
+];
+
+const answers = [];
+const slides = document.getElementById('slides');
+let currentSlide = 0;
+
+function createSliderSlide(q, index) {
+  const slide = document.createElement('div');
+  slide.className = 'slide';
+  const title = document.createElement('h2');
+  title.textContent = q.title;
+  const qText = document.createElement('div');
+  qText.className = 'question';
+  qText.textContent = q.text;
+  const sliderContainer = document.createElement('div');
+  sliderContainer.className = 'slider-container';
+  const prefSliderText = document.createElement('div');
+  prefSliderText.className = 'slider-value-text';
+  const prefSlider = document.createElement('input');
+  prefSlider.type = 'range';
+  prefSlider.min = '0';
+  prefSlider.max = (q.title === "Density") ? '4' : (q.title === "Politics") ? '8' : '8';
+  prefSlider.step = '1';
+  prefSlider.value = (q.title === "Density") ? '2' : (q.title === "Politics") ? '4' : '4';
+  const updatePrefText = () => {
+    const val = Math.round(prefSlider.value);
+    if (q.title === "Politics") prefSliderText.innerText = politicalTexts[val];
+    else if (q.title === "Density") prefSliderText.innerText = densityTexts[val];
+    else prefSliderText.innerText = sliderTexts[val];
+    const brownShade = 230 - (val * 6);
+    prefSlider.style.background = `rgb(${brownShade}, ${brownShade - 20}, ${brownShade - 40})`;
+  };
+  prefSlider.addEventListener('input', updatePrefText);
+  updatePrefText();
+  const labels = document.createElement('div');
+  labels.className = 'slider-labels';
+  if (q.title === "Politics") labels.innerHTML = '<span>Conservative</span><span>Liberal</span>';
+  else if (q.title === "Density") labels.innerHTML = '<span>Rural</span><span>Urban</span>';
+  else labels.innerHTML = '<span>Not at all</span><span>Very</span>';
+  sliderContainer.appendChild(prefSliderText);
+  sliderContainer.appendChild(prefSlider);
+  sliderContainer.appendChild(labels);
+  let impSlider = null;
+  if (q.dualSlider) {
+    const impText = document.createElement('div');
+    impText.className = 'slider-value-text';
+    impSlider = document.createElement('input');
+    impSlider.type = 'range';
+    impSlider.min = '0';
+    impSlider.max = '8';
+    impSlider.step = '1';
+    impSlider.value = '4';
+    impSlider.addEventListener('input', () => {
+      const val = Math.round(impSlider.value);
+      impText.innerText = "Importance: " + sliderTexts[val];
+      const brownShade = 230 - (val * 6);
+      impSlider.style.background = `rgb(${brownShade}, ${brownShade - 20}, ${brownShade - 40})`;
+    });
+    impSlider.dispatchEvent(new Event('input'));
+    sliderContainer.appendChild(impText);
+    sliderContainer.appendChild(impSlider);
+  }
+  const btnRow = document.createElement('div');
+  btnRow.className = 'btn-row';
+  const backBtn = document.createElement('button');
+  backBtn.className = 'back-btn';
+  backBtn.textContent = 'Back';
+  backBtn.onclick = goBack;
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'next-btn';
+  nextBtn.textContent = (index === questions.length - 1) ? 'Continue' : 'Next';
+  nextBtn.onclick = () => {
+    answers.push(prefSlider.value);
+    if (impSlider) answers.push(impSlider.value);
+    goNext();
+  };
+  btnRow.appendChild(backBtn);
+  btnRow.appendChild(nextBtn);
+  slide.appendChild(title);
+  slide.appendChild(qText);
+  slide.appendChild(sliderContainer);
+  slide.appendChild(btnRow);
+  return slide;
+}
+
+function createFinalSlide() {
+  const slide = document.createElement('div');
+  slide.className = 'slide';
+  slide.innerHTML = `
+    <h2>Ready to Find Your Cities?</h2>
+    <div class="final-options">
+      <label><input type="radio" name="cityCount" value="3" checked> Show 3 cities</label>
+      <label><input type="radio" name="cityCount" value="5"> Show 5 cities</label>
+      <label><input type="radio" name="cityCount" value="10"> Show 10 cities</label>
+      <label><input type="checkbox" id="showAvoid"> Also show cities to avoid</label>
+    </div>
+    <div class="btn-row">
+      <button class="back-btn" onclick="goBack()">Back</button>
+      <button class="next-btn" onclick="submitAnswers()">Submit</button>
+    </div>
+  `;
+  return slide;
+}
+
+function goNext() {
+  currentSlide++;
+  slides.style.transform = `translateX(-${100 * currentSlide}%)`;
+}
+
+function goBack() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    slides.style.transform = `translateX(-${100 * currentSlide}%)`;
+  }
+}
+
+async function submitAnswers() {
+  const selectedCityCount = document.querySelector('input[name="cityCount"]:checked').value;
+  const showAvoid = document.getElementById('showAvoid').checked;
+  answers.push(selectedCityCount, showAvoid);
+  document.getElementById('carousel').style.opacity = '0';
+  await new Promise(resolve => setTimeout(resolve, 800));
+  document.getElementById('carousel').style.display = 'none';
+  fetchResults();
+}
+
+async function fetchResults() {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
+  resultsDiv.style.display = 'flex';
+  // --- Here should be real fetch API call in production ---
+  // This below simulates fake results for now:
+
+  const fakeGood = [
+    {city: "Bend", state: "Oregon", blurb: "Known for its outdoor beauty and relaxed vibe."},
+    {city: "Boise", state: "Idaho", blurb: "A growing tech hub with a strong sense of community."}
+  ];
+  const fakeAvoid = [
+    {city: "CityX", state: "Somewhere", blurb: "High crime and expensive cost of living."}
+  ];
+
+  fakeGood.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'result-card good';
+    card.innerHTML = `<h3>${item.city}, ${item.state}</h3><p>${item.blurb}</p>`;
+    resultsDiv.appendChild(card);
+  });
+
+  if (answers[answers.length-1] === true) {
+    fakeAvoid.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'result-card avoid';
+      card.innerHTML = `<h3>${item.city}, ${item.state}</h3><p>${item.blurb}</p>`;
+      resultsDiv.appendChild(card);
+    });
+  }
+}
+
+questions.forEach((q, i) => {
+  slides.appendChild(createSliderSlide(q, i));
+});
+slides.appendChild(createFinalSlide());
+</script>
+
+</body>
+</html>
