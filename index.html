@@ -227,10 +227,21 @@
       margin-top: 10px;
       line-height: 1.4;
     }
+    .city-card a {
+      display: block;
+      margin-top: 12px;
+      color: #2ac179;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .city-card a:hover {
+      text-decoration: underline;
+    }
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5951831012865909"
-     crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5951831012865909" crossorigin="anonymous"></script>
 </head>
+
 <body>
 
 <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
@@ -402,6 +413,7 @@ async function submitAnswers() {
   setTimeout(async () => {
     document.getElementById('carousel').style.display = 'none';
     const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
     resultsDiv.style.display = 'flex';
 
     try {
@@ -412,20 +424,24 @@ async function submitAnswers() {
       });
       const data = await res.json();
 
-      data.good_matches.forEach(city => {
+      for (const city of data.good_matches) {
+        const cityName = encodeURIComponent(`${city.city}_${city.state}`);
+        const wikiLink = `https://en.wikipedia.org/wiki/${cityName}`;
         const card = document.createElement('div');
         card.className = 'city-card';
-        card.innerHTML = `<h3>${city.city}, ${city.state}</h3><p>${city.positive}</p>`;
+        card.innerHTML = `<h3>${city.city}, ${city.state}</h3><p>${city.positive}</p><a href="${wikiLink}" target="_blank">Learn more</a>`;
         resultsDiv.appendChild(card);
-      });
+      }
 
       if (showAvoid) {
-        data.bad_matches.forEach(city => {
+        for (const city of data.bad_matches) {
+          const cityName = encodeURIComponent(`${city.city}_${city.state}`);
+          const wikiLink = `https://en.wikipedia.org/wiki/${cityName}`;
           const card = document.createElement('div');
           card.className = 'city-card avoid-card';
-          card.innerHTML = `<h3>${city.city}, ${city.state}</h3><p>${city.negative}</p>`;
+          card.innerHTML = `<h3>${city.city}, ${city.state}</h3><p>${city.negative}</p><a href="${wikiLink}" target="_blank">Learn more</a>`;
           resultsDiv.appendChild(card);
-        });
+        }
       }
     } catch (error) {
       console.error('Error fetching cities:', error);
@@ -438,5 +454,6 @@ questions.forEach((q, i) => {
 });
 slides.appendChild(createFinalSlide());
 </script>
+
 </body>
 </html>
