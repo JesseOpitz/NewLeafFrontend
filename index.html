@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NewLeaf</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
@@ -191,8 +191,8 @@
       font-size: 18px;
       color: #234f3e;
     }
-    .final-options input[type="radio"],
-    .final-options input[type="checkbox"] {
+    .final-options input[type=\"radio\"],
+    .final-options input[type=\"checkbox\"] {
       margin-right: 10px;
       accent-color: #2ac179;
       transform: scale(1.3);
@@ -218,7 +218,7 @@
       background: #f3ede8;
     }
     .city-card h3 {
-      margin: 0;
+      margin: 10px 0 0;
       color: #2ac179;
     }
     .city-card p {
@@ -238,222 +238,201 @@
     .city-card a:hover {
       text-decoration: underline;
     }
+    .city-thumbnail {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5951831012865909" crossorigin="anonymous"></script>
 </head>
-
 <body>
-
-<img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
-
-<div class="main-content" id="homeScreen">
-  <h1>Welcome to New Leaf</h1>
-  <p class="description">
-    Discover cities that match your lifestyle, values, and dreams.
-    Take our short questionnaire and find your perfect new home!
-  </p>
-  <button class="start-btn" onclick="startQuestionnaire()">Get Started</button>
-</div>
-
-<div class="carousel" id="carousel">
-  <div class="slides" id="slides"></div>
-</div>
-
-<div id="results" style="display:none;"></div>
-
-<div class="tagline">
-  Turn a New Leaf. Discover Your New Home.
-  <a href="policy.html" style="color: #2ac179; text-decoration: none;">Privacy Policy</a>
-</div>
-
-<script>
-function startQuestionnaire() {
-  document.getElementById('homeScreen').style.display = 'none';
-  document.getElementById('carousel').style.display = 'flex';
-}
-
-const questions = [
-  { title: "Safety", text: "How important is living in a low-crime area to you?" },
-  { title: "Employment", text: "How important is having strong job opportunities nearby?" },
-  { title: "Diversity", text: "How important is living in a diverse and multicultural community?" },
-  { title: "Affordability", text: "How important is affordability and low cost of living?" },
-  { title: "Walkability", text: "How important is being able to walk to shops, restaurants, and parks?" },
-  { title: "Remote Work", text: "How important is access to remote work opportunities?" },
-  { title: "Density", text: "Do you prefer rural, suburban, or urban living?" },
-  { title: "Politics", text: "Do you prefer a more liberal or conservative political climate?" }
-];
-
-const sliderTexts = [
-  "Not important at all", "Barely matters", "Slightly important", "Somewhat relevant",
-  "Neutral", "Kind of important", "Pretty important", "Very important", "Extremely important"
-];
-const politicalTexts = [
-  "Very conservative","Conservative","Somewhat conservative","Moderate conservative",
-  "Centrist","Moderate liberal","Somewhat liberal","Liberal","Very liberal"
-];
-const densityTexts = [
-  "Very rural","Mostly rural","Mixed suburban-rural","Suburban","Urban center"
-];
-
-const answers = [];
-const slides = document.getElementById('slides');
-let currentSlide = 0;
-
-function createSliderSlide(q, index) {
-  const slide = document.createElement('div');
-  slide.className = 'slide';
-
-  const title = document.createElement('h2');
-  title.textContent = q.title;
-
-  const qText = document.createElement('div');
-  qText.className = 'question';
-  qText.textContent = q.text;
-
-  const sliderContainer = document.createElement('div');
-  sliderContainer.className = 'slider-container';
-
-  const prefSliderText = document.createElement('div');
-  prefSliderText.className = 'slider-value-text';
-
-  const prefSlider = document.createElement('input');
-  prefSlider.type = 'range';
-  prefSlider.min = '0';
-  prefSlider.max = (q.title === "Density") ? '4' : (q.title === "Politics") ? '8' : '8';
-  prefSlider.step = '1';
-  prefSlider.value = (q.title === "Density") ? '2' : (q.title === "Politics") ? '4' : '4';
-
-  const updatePrefText = () => {
-    const val = Math.round(prefSlider.value);
-    if (q.title === "Politics") prefSliderText.innerText = politicalTexts[val];
-    else if (q.title === "Density") prefSliderText.innerText = densityTexts[val];
-    else prefSliderText.innerText = sliderTexts[val];
-    const brownShade = 230 - (val * 6);
-    prefSlider.style.background = `rgb(${brownShade}, ${brownShade - 20}, ${brownShade - 40})`;
-  };
-  prefSlider.addEventListener('input', updatePrefText);
-  updatePrefText();
-
-  const labels = document.createElement('div');
-  labels.className = 'slider-labels';
-  if (q.title === "Politics") labels.innerHTML = '<span>Conservative</span><span>Liberal</span>';
-  else if (q.title === "Density") labels.innerHTML = '<span>Rural</span><span>Urban</span>';
-  else labels.innerHTML = '<span>Not at all</span><span>Very</span>';
-
-  sliderContainer.appendChild(prefSliderText);
-  sliderContainer.appendChild(prefSlider);
-  sliderContainer.appendChild(labels);
-
-  const btnRow = document.createElement('div');
-  btnRow.className = 'btn-row';
-
-  const backBtn = document.createElement('button');
-  backBtn.className = 'back-btn';
-  backBtn.textContent = 'Back';
-  backBtn.onclick = goBack;
-
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'next-btn';
-  nextBtn.textContent = (index === questions.length - 1) ? 'Continue' : 'Next';
-  nextBtn.onclick = () => {
-    answers.push(Number(prefSlider.value));
-    goNext();
-  };
-
-  btnRow.appendChild(backBtn);
-  btnRow.appendChild(nextBtn);
-
-  slide.appendChild(title);
-  slide.appendChild(qText);
-  slide.appendChild(sliderContainer);
-  slide.appendChild(btnRow);
-
-  return slide;
-}
-
-function createFinalSlide() {
-  const slide = document.createElement('div');
-  slide.className = 'slide';
-  slide.innerHTML = `
-    <h2>Ready to Find Your Cities?</h2>
-    <div class="final-options">
-      <label><input type="radio" name="cityCount" value="3" checked> Show 3 cities</label>
-      <label><input type="radio" name="cityCount" value="5"> Show 5 cities</label>
-      <label><input type="radio" name="cityCount" value="10"> Show 10 cities</label>
-      <label><input type="checkbox" id="showAvoid"> Also show cities to avoid</label>
-    </div>
-    <div class="btn-row">
-      <button class="back-btn" onclick="goBack()">Back</button>
-      <button class="next-btn" onclick="submitAnswers()">Submit</button>
-    </div>
-  `;
-  return slide;
-}
-
-function goNext() {
-  currentSlide++;
-  slides.style.transform = `translateX(-${100 * currentSlide}%)`;
-}
-
-function goBack() {
-  if (currentSlide > 0) {
-    currentSlide--;
-    slides.style.transform = `translateX(-${100 * currentSlide}%)`;
-  }
-}
-
-async function submitAnswers() {
-  const selectedCityCount = Number(document.querySelector('input[name="cityCount"]:checked').value);
-  const showAvoid = document.getElementById('showAvoid').checked;
-  answers.push(selectedCityCount);
-  answers.push(showAvoid);
-
-  document.getElementById('carousel').style.opacity = 0;
-
-  setTimeout(async () => {
-    document.getElementById('carousel').style.display = 'none';
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '';
-    resultsDiv.style.display = 'flex';
-
-    try {
-      const res = await fetch('https://new-leaf.onrender.com/match', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers })
-      });
-      const data = await res.json();
-
-      for (const city of data.good_matches) {
-        const cityName = encodeURIComponent(`${city.city}_${city.state}`);
-        const wikiLink = `https://en.wikipedia.org/wiki/${cityName}`;
-        const card = document.createElement('div');
-        card.className = 'city-card';
-        card.innerHTML = `<h3>${city.city}, ${city.state}</h3><p>${city.positive}</p><a href="${wikiLink}" target="_blank">Learn more</a>`;
-        resultsDiv.appendChild(card);
-      }
-
-      if (showAvoid) {
-        for (const city of data.bad_matches) {
-          const cityName = encodeURIComponent(`${city.city}_${city.state}`);
-          const wikiLink = `https://en.wikipedia.org/wiki/${cityName}`;
-          const card = document.createElement('div');
-          card.className = 'city-card avoid-card';
-          card.innerHTML = `<h3>${city.city}, ${city.state}</h3><p>${city.negative}</p><a href="${wikiLink}" target="_blank">Learn more</a>`;
-          resultsDiv.appendChild(card);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching cities:', error);
+  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
+  <div class="main-content" id="homeScreen">
+    <h1>Welcome to New Leaf</h1>
+    <p class="description">
+      Discover cities that match your lifestyle, values, and dreams.
+      Take our short questionnaire and find your perfect new home!
+    </p>
+    <button class="start-btn" onclick="startQuestionnaire()">Get Started</button>
+  </div>
+  <div class="carousel" id="carousel">
+    <div class="slides" id="slides"></div>
+  </div>
+  <div id="results" style="display:none;"></div>
+  <div class="tagline">
+    Turn a New Leaf. Discover Your New Home.
+    <a href="policy.html" style="color: #2ac179; text-decoration: none;">Privacy Policy</a>
+  </div>
+  <script>
+    function startQuestionnaire() {
+      document.getElementById('homeScreen').style.display = 'none';
+      document.getElementById('carousel').style.display = 'flex';
     }
-  }, 600);
-}
 
-questions.forEach((q, i) => {
-  slides.appendChild(createSliderSlide(q, i));
-});
-slides.appendChild(createFinalSlide());
-</script>
+    const questions = [
+      { title: "Safety", text: "How important is living in a low-crime area to you?" },
+      { title: "Employment", text: "How important is having strong job opportunities nearby?" },
+      { title: "Diversity", text: "How important is living in a diverse and multicultural community?" },
+      { title: "Affordability", text: "How important is affordability and low cost of living?" },
+      { title: "Walkability", text: "How important is being able to walk to shops, restaurants, and parks?" },
+      { title: "Remote Work", text: "How important is access to remote work opportunities?" },
+      { title: "Density", text: "Do you prefer rural, suburban, or urban living?" },
+      { title: "Politics", text: "Do you prefer a more liberal or conservative political climate?" }
+    ];
 
+    const sliderTexts = ["Not important at all", "Barely matters", "Slightly important", "Somewhat relevant", "Neutral", "Kind of important", "Pretty important", "Very important", "Extremely important"];
+    const politicalTexts = ["Very conservative", "Conservative", "Somewhat conservative", "Moderate conservative", "Centrist", "Moderate liberal", "Somewhat liberal", "Liberal", "Very liberal"];
+    const densityTexts = ["Very rural", "Mostly rural", "Mixed suburban-rural", "Suburban", "Urban center"];
+
+    const answers = [];
+    const slides = document.getElementById('slides');
+    let currentSlide = 0;
+
+    function createSliderSlide(q, index) {
+      const slide = document.createElement('div');
+      slide.className = 'slide';
+      const title = document.createElement('h2');
+      title.textContent = q.title;
+      const qText = document.createElement('div');
+      qText.className = 'question';
+      qText.textContent = q.text;
+      const sliderContainer = document.createElement('div');
+      sliderContainer.className = 'slider-container';
+      const prefSliderText = document.createElement('div');
+      prefSliderText.className = 'slider-value-text';
+      const prefSlider = document.createElement('input');
+      prefSlider.type = 'range';
+      prefSlider.min = '0';
+      prefSlider.max = (q.title === "Density") ? '4' : (q.title === "Politics") ? '8' : '8';
+      prefSlider.step = '1';
+      prefSlider.value = (q.title === "Density") ? '2' : (q.title === "Politics") ? '4' : '4';
+
+      const updatePrefText = () => {
+        const val = Number(prefSlider.value);
+        if (q.title === "Politics") prefSliderText.innerText = politicalTexts[val];
+        else if (q.title === "Density") prefSliderText.innerText = densityTexts[val];
+        else prefSliderText.innerText = sliderTexts[val];
+        const brownShade = 230 - (val * 6);
+        prefSlider.style.background = `rgb(${brownShade}, ${brownShade - 20}, ${brownShade - 40})`;
+      };
+      prefSlider.addEventListener('input', updatePrefText);
+      updatePrefText();
+
+      const labels = document.createElement('div');
+      labels.className = 'slider-labels';
+      if (q.title === "Politics") labels.innerHTML = '<span>Conservative</span><span>Liberal</span>';
+      else if (q.title === "Density") labels.innerHTML = '<span>Rural</span><span>Urban</span>';
+      else labels.innerHTML = '<span>Not at all</span><span>Very</span>';
+
+      sliderContainer.appendChild(prefSliderText);
+      sliderContainer.appendChild(prefSlider);
+      sliderContainer.appendChild(labels);
+
+      const btnRow = document.createElement('div');
+      btnRow.className = 'btn-row';
+      const backBtn = document.createElement('button');
+      backBtn.className = 'back-btn';
+      backBtn.textContent = 'Back';
+      backBtn.onclick = goBack;
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'next-btn';
+      nextBtn.textContent = (index === questions.length - 1) ? 'Continue' : 'Next';
+      nextBtn.onclick = () => {
+        answers[index] = Number(prefSlider.value);
+        goNext();
+      };
+
+      btnRow.appendChild(backBtn);
+      btnRow.appendChild(nextBtn);
+      slide.appendChild(title);
+      slide.appendChild(qText);
+      slide.appendChild(sliderContainer);
+      slide.appendChild(btnRow);
+
+      return slide;
+    }
+
+    function createFinalSlide() {
+      const slide = document.createElement('div');
+      slide.className = 'slide';
+      slide.innerHTML = `
+        <h2>Ready to Find Your Cities?</h2>
+        <div class="final-options">
+          <label><input type="radio" name="cityCount" value="3" checked> Show 3 cities</label>
+          <label><input type="radio" name="cityCount" value="5"> Show 5 cities</label>
+          <label><input type="radio" name="cityCount" value="10"> Show 10 cities</label>
+          <label><input type="checkbox" id="showAvoid"> Also show cities to avoid</label>
+        </div>
+        <div class="btn-row">
+          <button class="back-btn" onclick="goBack()">Back</button>
+          <button class="next-btn" onclick="submitAnswers()">Submit</button>
+        </div>`;
+      return slide;
+    }
+
+    function goNext() {
+      currentSlide++;
+      slides.style.transform = `translateX(-${100 * currentSlide}%)`;
+    }
+
+    function goBack() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        slides.style.transform = `translateX(-${100 * currentSlide}%)`;
+      }
+    }
+
+    async function submitAnswers() {
+      const selectedCityCount = Number(document.querySelector('input[name=\"cityCount\"]:checked').value);
+      const showAvoid = document.getElementById('showAvoid').checked;
+      answers.push(selectedCityCount, showAvoid);
+
+      document.getElementById('carousel').style.opacity = 0;
+      setTimeout(async () => {
+        document.getElementById('carousel').style.display = 'none';
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+        resultsDiv.style.display = 'flex';
+
+        try {
+          const res = await fetch('https://new-leaf.onrender.com/match', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answers })
+          });
+          const data = await res.json();
+
+          for (const city of data.good_matches) {
+            const imageName = `${city.city}_${city.state}`.replace(/\\s+/g, '_') + '.jpg';
+            const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;
+            const wikiLink = city.Wikipedia_URL || '#';
+            const card = document.createElement('div');
+            card.className = 'city-card';
+            card.innerHTML = `<h3>${city.city}, ${city.state}</h3><img class=\"city-thumbnail\" src=\"${imgSrc}\" alt=\"${city.city}\"><p>${city.positive}</p><a href=\"${wikiLink}\" target=\"_blank\">Learn more</a>`;
+            resultsDiv.appendChild(card);
+          }
+
+          if (showAvoid) {
+            for (const city of data.bad_matches) {
+              const imageName = `${city.city}_${city.state}`.replace(/\\s+/g, '_') + '.jpg';
+              const imgSrc = `thumbnails/${imageName}`;
+              const wikiLink = city.Wikipedia_URL || '#';
+              const card = document.createElement('div');
+              card.className = 'city-card avoid-card';
+              card.innerHTML = `<h3>${city.city}, ${city.state}</h3><img class=\"city-thumbnail\" src=\"${imgSrc}\" alt=\"${city.city}\"><p>${city.positive}</p><a href=\"${wikiLink}\" target=\"_blank\">Learn more</a>`;
+              resultsDiv.appendChild(card);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching cities:', error);
+        }
+      }, 600);
+    }
+
+    questions.forEach((q, i) => slides.appendChild(createSliderSlide(q, i)));
+    slides.appendChild(createFinalSlide());
+  </script>
 </body>
 </html>
