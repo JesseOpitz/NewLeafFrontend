@@ -7,98 +7,155 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
     body {
-      font-family: 'Quicksand', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
       background: linear-gradient(to bottom, #eafff5, #d0fff1);
       color: #234f3e;
-      line-height: 1.6;
+      position: relative;
     }
-    .hamburger {
-      position: absolute;
-      top: 15px;
+
+    .logo {
+      display: block;
+      width: 130px;
+      margin: 20px auto 0;
+      cursor: pointer;
+    }
+
+    nav {
+      position: fixed;
+      top: 20px;
       left: 20px;
+      z-index: 10;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
       font-size: 28px;
       cursor: pointer;
-      color: #2ac179;
-      z-index: 2;
+      z-index: 11;
     }
+
     .nav-menu {
-      position: absolute;
-      top: 60px;
-      left: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      display: none;
-      flex-direction: column;
-      padding: 10px;
-      z-index: 3;
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 220px;
+      background: #fff;
+      height: 100%;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+      border-radius: 0 10px 10px 0;
+      transition: left 0.3s ease;
+      padding-top: 60px;
+      z-index: 10;
     }
+
+    .nav-menu.open {
+      left: 0;
+    }
+
     .nav-menu a {
-      padding: 10px;
-      text-decoration: none;
+      display: block;
+      padding: 15px 20px;
       color: #234f3e;
-      font-weight: bold;
+      text-decoration: none;
     }
+
     .nav-menu a:hover {
-      background: #ebfff7;
-      border-radius: 6px;
+      background-color: #f0f0f0;
     }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 9;
+    }
+
+    #overlay.active {
+      display: block;
+    }
+
+    .content {
+      max-width: 800px;
+      background: #ffffff;
+      margin: 30px auto 40px;
+      padding: 30px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+    }
+
     h1 {
       text-align: center;
       color: #2ac179;
-      margin-top: 60px;
     }
-    .content {
-      max-width: 800px;
-      margin: auto;
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin-top: 20px;
-    }
+
     a {
       color: #2ac179;
       text-decoration: none;
     }
+
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
+  <nav>
+    <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+  </nav>
+  <div class="nav-menu" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="questionnaire.html">Questionnaire</a>
+    <a href="about.html">How it Works</a>
+    <a href="policy.html">Privacy Policy</a>
+  </div>
+  <div id="overlay" onclick="closeMenu()"></div>
 
-<div class="hamburger" onclick="toggleMenu()">☰</div>
-<div class="nav-menu" id="navMenu">
-  <a href="index.html">Home</a>
-  <a href="questionnaire.html">Questionnaire</a>
-  <a href="about.html">How it Works</a>
-  <a href="policy.html">Privacy Policy</a>
-</div>
+  <a href="index.html">
+    <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo" />
+  </a>
 
-<div class="content">
-  <h1>Privacy Policy</h1>
-  <p><strong>Effective Date:</strong> April 2025</p>
+  <div class="content">
+    <h1>Privacy Policy</h1>
+    <p><strong>Effective Date:</strong> April 2025</p>
+    <p>At <strong>New Leaf</strong>, accessible from <a href="https://new-leaf.net">https://new-leaf.net</a>, your privacy is a top priority. This Privacy Policy outlines the types of information we collect and how we use it.</p>
 
-  <p>At <strong>New Leaf</strong>, accessible from <a href="https://new-leaf.net">https://new-leaf.net</a>, your privacy is a top priority. This Privacy Policy outlines the types of information we collect and how we use it.</p>
+    <h2>Information We Collect</h2>
+    <p>We do not collect personally identifiable information from users. We may collect basic, non-personal analytics data and advertising information through third-party services like Google AdSense.</p>
 
-  <h2>Information We Collect</h2>
-  <p>We do not collect personally identifiable information from users. We may collect basic, non-personal analytics data and advertising information through third-party services like Google AdSense.</p>
+    <h2>Cookies and Web Beacons</h2>
+    <p>We use cookies to enhance your experience and serve relevant ads through third-party providers. You can control cookie preferences in your browser settings.</p>
 
-  <h2>Cookies and Web Beacons</h2>
-  <p>We use cookies to enhance your experience and serve relevant ads through third-party providers. You can control cookie preferences in your browser settings.</p>
+    <h2>Third-Party Privacy Policies</h2>
+    <p>Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons in their respective advertisements and links that appear on our site. These technologies are used to measure the effectiveness of their campaigns and personalize advertising content.</p>
 
-  <h2>Third-Party Privacy Policies</h2>
-  <p>Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on our site. These are sent directly to users’ browsers and may automatically collect your IP address. New Leaf has no access to or control over these cookies used by third-party advertisers.</p>
+    <p>To learn more about these third-party policies, please review their individual privacy policies directly.</p>
+  </div>
 
-  <p>If you have questions about this policy, contact us via the site’s support section.</p>
-</div>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('navMenu');
+      const overlay = document.getElementById('overlay');
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('active');
+      }
+    }
 
-<script>
-  function toggleMenu() {
-    const nav = document.getElementById("navMenu");
-    nav.style.display = nav.style.display === "flex" ? "none" : "flex";
-  }
-</script>
-
+    function closeMenu() {
+      document.getElementById('navMenu').classList.remove('open');
+      document.getElementById('overlay').classList.remove('active');
+    }
+  </script>
 </body>
 </html>
