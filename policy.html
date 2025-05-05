@@ -1,9 +1,11 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Privacy Policy - New Leaf</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
     body {
       font-family: 'Quicksand', sans-serif;
       margin: 0;
@@ -12,9 +14,41 @@
       color: #234f3e;
       line-height: 1.6;
     }
+    .hamburger {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #2ac179;
+      z-index: 2;
+    }
+    .nav-menu {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+      padding: 10px;
+      z-index: 3;
+    }
+    .nav-menu a {
+      padding: 10px;
+      text-decoration: none;
+      color: #234f3e;
+      font-weight: bold;
+    }
+    .nav-menu a:hover {
+      background: #ebfff7;
+      border-radius: 6px;
+    }
     h1 {
       text-align: center;
       color: #2ac179;
+      margin-top: 60px;
     }
     .content {
       max-width: 800px;
@@ -23,6 +57,7 @@
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
     }
     a {
       color: #2ac179;
@@ -30,8 +65,40 @@
     }
   </style>
 </head>
-<body><div class="content">
-  <h1>Privacy Policy</h1>  <p>Effective Date: April 2025</p>  <p>At <strong>New Leaf</strong>, accessible from <a href="https://new-leaf.net">https://new-leaf.net</a>, your privacy is a top priority. This Privacy Policy outlines the types of information we collect and how we use it.</p>  <h2>Information We Collect</h2>
-  <p>We do not collect personally identifiable information from users. We may collect basic, non-personal analytics data and advertising information through third-party services like Google AdSense.</p>  <h2>Cookies and Web Beacons</h2>
-  <p>We use cookies to enhance your experience and serve relevant ads through third-party providers. You can control cookie preferences in your browser settings.</p>  <h2>Third-Party Privacy Policies</h2>
-  <p>Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on
+<body>
+
+<div class="hamburger" onclick="toggleMenu()">☰</div>
+<div class="nav-menu" id="navMenu">
+  <a href="index.html">Home</a>
+  <a href="questionnaire.html">Questionnaire</a>
+  <a href="about.html">How it Works</a>
+  <a href="policy.html">Privacy Policy</a>
+</div>
+
+<div class="content">
+  <h1>Privacy Policy</h1>
+  <p><strong>Effective Date:</strong> April 2025</p>
+
+  <p>At <strong>New Leaf</strong>, accessible from <a href="https://new-leaf.net">https://new-leaf.net</a>, your privacy is a top priority. This Privacy Policy outlines the types of information we collect and how we use it.</p>
+
+  <h2>Information We Collect</h2>
+  <p>We do not collect personally identifiable information from users. We may collect basic, non-personal analytics data and advertising information through third-party services like Google AdSense.</p>
+
+  <h2>Cookies and Web Beacons</h2>
+  <p>We use cookies to enhance your experience and serve relevant ads through third-party providers. You can control cookie preferences in your browser settings.</p>
+
+  <h2>Third-Party Privacy Policies</h2>
+  <p>Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on our site. These are sent directly to users’ browsers and may automatically collect your IP address. New Leaf has no access to or control over these cookies used by third-party advertisers.</p>
+
+  <p>If you have questions about this policy, contact us via the site’s support section.</p>
+</div>
+
+<script>
+  function toggleMenu() {
+    const nav = document.getElementById("navMenu");
+    nav.style.display = nav.style.display === "flex" ? "none" : "flex";
+  }
+</script>
+
+</body>
+</html>
