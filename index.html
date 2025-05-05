@@ -1,7 +1,8 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>New Leaf</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
@@ -15,22 +16,27 @@
       flex-direction: column;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
+
     .logo {
       display: block;
       margin: 20px auto 0;
       width: 130px;
     }
+
     .header-text {
       color: #2ac179;
       text-align: center;
       font-size: 32px;
       margin-top: 10px;
     }
+
     .start-section {
       text-align: center;
       padding: 30px 20px 10px;
     }
+
     .start-btn {
       background-color: #2ac179;
       color: white;
@@ -42,24 +48,36 @@
       transition: background-color 0.3s ease;
       margin-top: 20px;
     }
+
     .start-btn:hover {
       background-color: #23a06b;
     }
+
     .description-container {
       padding: 0 20px;
       text-align: center;
     }
+
+    .divider {
+      text-align: center;
+      color: #888;
+      margin: 30px 0 10px;
+      font-size: 14px;
+    }
+
     .input-section {
       background: #ffffff;
       border-radius: 20px;
-      margin: 30px 20px;
+      margin: 20px 20px 40px;
       padding: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
+
     .input-section h2 {
       color: #2ac179;
       margin-top: 0;
     }
+
     textarea {
       width: 100%;
       height: 150px;
@@ -71,82 +89,142 @@
       resize: none;
       box-sizing: border-box;
     }
+
     .char-counter {
       text-align: right;
       font-size: 14px;
       margin-top: 5px;
       color: #555;
     }
+
     .char-counter.exceeded {
       color: red;
     }
-    .tagline {
+
+    .submit-btn {
+      margin-top: 15px;
+      background-color: #2ac179;
+      color: white;
+      border: none;
+      padding: 12px 24px;
       font-size: 16px;
-      text-align: center;
-      color: #5b8d7a;
-      padding: 20px;
-      background: #ebfff7;
-      margin-top: auto;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
+
+    .submit-btn:hover {
+      background-color: #23a06b;
+    }
+
     nav {
-      position: absolute;
+      position: fixed;
       top: 20px;
       left: 20px;
+      z-index: 10;
     }
+
     .menu-btn {
       background: none;
       border: none;
-      font-size: 26px;
+      font-size: 28px;
       cursor: pointer;
+      z-index: 11;
     }
+
     .nav-menu {
-      display: none;
-      background: white;
-      position: absolute;
-      top: 60px;
-      left: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 220px;
+      background: #fff;
+      height: 100%;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+      border-radius: 0 10px 10px 0;
+      transition: left 0.3s ease;
+      padding-top: 60px;
     }
+
+    .nav-menu.open {
+      left: 0;
+    }
+
     .nav-menu a {
       display: block;
-      padding: 10px 20px;
+      padding: 15px 20px;
       color: #234f3e;
       text-decoration: none;
     }
+
     .nav-menu a:hover {
       background-color: #f0f0f0;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 9;
+    }
+
+    #overlay.active {
+      display: block;
     }
   </style>
 </head>
 <body>
   <nav>
     <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
-    <div class="nav-menu" id="navMenu">
-      <a href="index.html">Home</a>
-      <a href="questionnaire.html">Questionnaire</a>
-      <a href="about.html">How it Works</a>
-      <a href="policy.html">Privacy Policy</a>
-    </div>
-  </nav>  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo" />
-  <h1 class="header-text">Welcome to New Leaf</h1>  <div class="start-section">
+  </nav>
+  <div class="nav-menu" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="questionnaire.html">Questionnaire</a>
+    <a href="about.html">How it Works</a>
+    <a href="policy.html">Privacy Policy</a>
+  </div>
+  <div id="overlay" onclick="closeMenu()"></div>
+
+  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo"/>
+  <h1 class="header-text">Welcome to New Leaf</h1>
+
+  <div class="start-section">
     <div class="description-container">
       <h2>Ready to find the perfect place to live?</h2>
       <p>Answer a few quick questions and we’ll suggest the best cities based on your values and lifestyle.</p>
     </div>
     <a href="questionnaire.html"><button class="start-btn">Get Started</button></a>
-  </div>  <div class="input-section">
+  </div>
+
+  <div class="divider">— or —</div>
+
+  <div class="input-section">
     <h2>Describe Your Ideal City</h2>
     <p>You can describe your dream city below, and we’ll match you to cities from our database using AI.</p>
     <textarea id="cityInput" maxlength="1000" placeholder="My ideal city would be..." oninput="updateCounter()"></textarea>
     <div class="char-counter" id="charCount">0 / 1000</div>
-  </div>  <div class="tagline">
-    Turn a New Leaf. Discover Your New Home.
-    <a href="policy.html" style="color: #2ac179; text-decoration: none;">Privacy Policy</a>
-  </div>  <script>
+    <button class="submit-btn" onclick="submitCityDescription()">Submit</button>
+  </div>
+
+  <script>
     function toggleMenu() {
       const menu = document.getElementById('navMenu');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      const overlay = document.getElementById('overlay');
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('active');
+      }
+    }
+
+    function closeMenu() {
+      document.getElementById('navMenu').classList.remove('open');
+      document.getElementById('overlay').classList.remove('active');
     }
 
     function updateCounter() {
@@ -156,5 +234,16 @@
       counter.textContent = `${length} / 1000`;
       counter.classList.toggle('exceeded', length > 1000);
     }
-  </script></body>
+
+    function submitCityDescription() {
+      const text = document.getElementById('cityInput').value.trim();
+      if (!text) {
+        alert("Please describe your ideal city.");
+        return;
+      }
+      // Placeholder for backend integration
+      alert("Description submitted: " + text);
+    }
+  </script>
+</body>
 </html>
