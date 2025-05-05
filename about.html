@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - NewLeaf</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom, #eafff5, #d0fff1);
+      color: #234f3e;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .logo {
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      z-index: 1;
+    }
+    .hamburger {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #2ac179;
+      z-index: 2;
+    }
+    .nav-menu {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+      padding: 10px;
+      z-index: 3;
+    }
+    .nav-menu a {
+      padding: 10px;
+      text-decoration: none;
+      color: #234f3e;
+      font-weight: bold;
+    }
+    .nav-menu a:hover {
+      background: #ebfff7;
+      border-radius: 6px;
+    }
+    .about-content {
+      padding: 120px 20px 40px;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .about-content h1 {
+      font-size: 28px;
+      color: #2ac179;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .about-content p {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #234f3e;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
+  <div class="nav-menu" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="questionnaire.html">Questionnaire</a>
+    <a href="about.html">How it Works</a>
+    <a href="policy.html">Privacy Policy</a>
+  </div>
+
+  <div class="about-content">
+    <h1>How It Works</h1>
+    <p>
+      At New Leaf, we've built a powerful recommendation engine that combines your personal preferences with extensive data about cities across the United States. Our scoring algorithm evaluates factors like cost of living, crime rates, walkability, remote work readiness, diversity, and more—each pulled from trustworthy public data sources such as the U.S. Census Bureau, the Bureau of Labor Statistics, FBI Uniform Crime Reporting, and independent walkability indices.
+    </p>
+    <p>
+      Each city is ranked and normalized across multiple dimensions, allowing your answers to be translated into a weighted score that reflects how closely a city matches your values. We also include detailed descriptions and even flag cities that may be poor fits based on your preferences. All of this is continuously updated and refined as new data becomes available, giving you a reliable, data-backed recommendation engine to support your next big move.
+    </p>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById("navMenu");
+      nav.style.display = nav.style.display === "flex" ? "none" : "flex";
+    }
+  </script>
+</body>
+</html>
