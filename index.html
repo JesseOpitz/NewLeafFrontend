@@ -121,7 +121,7 @@
       position: fixed;
       top: 20px;
       left: 20px;
-      z-index: 10;
+      z-index: 20;
     }
 
     .menu-btn {
@@ -129,7 +129,7 @@
       border: none;
       font-size: 28px;
       cursor: pointer;
-      z-index: 11;
+      z-index: 21;
     }
 
     .nav-menu {
@@ -143,6 +143,7 @@
       border-radius: 0 10px 10px 0;
       transition: left 0.3s ease;
       padding-top: 60px;
+      z-index: 20;
     }
 
     .nav-menu.open {
@@ -167,7 +168,7 @@
       left: 0;
       height: 100%;
       width: 100%;
-      z-index: 9;
+      z-index: 10;
     }
 
     #overlay.active {
@@ -179,7 +180,7 @@
   <nav>
     <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
   </nav>
-  <div class="nav-menu" id="navMenu">
+  <div class="nav-menu" id="navMenu" onclick="event.stopPropagation()">
     <a href="index.html">Home</a>
     <a href="questionnaire.html">Questionnaire</a>
     <a href="about.html">How it Works</a>
@@ -241,7 +242,6 @@
         alert("Please describe your ideal city.");
         return;
       }
-      // Placeholder for backend integration
       alert("Description submitted: " + text);
     }
   </script>
