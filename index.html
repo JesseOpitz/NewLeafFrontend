@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NewLeaf - Welcome</title>
+  <title>New Leaf</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
     body {
@@ -17,25 +17,19 @@
       overflow-x: hidden;
     }
     .logo {
-      margin-top: 10px;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 20px auto 0;
       width: 130px;
     }
-    h1 {
-      font-size: 32px;
+    .header-text {
       color: #2ac179;
+      text-align: center;
+      font-size: 32px;
       margin-top: 10px;
-      margin-bottom: 10px;
-      text-align: center;
     }
-    .description {
-      font-size: 18px;
+    .start-section {
       text-align: center;
-      margin: 20px auto;
-      max-width: 600px;
-      line-height: 1.6;
+      padding: 30px 20px 10px;
     }
     .start-btn {
       background-color: #2ac179;
@@ -46,102 +40,121 @@
       border-radius: 25px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      display: block;
-      margin: 20px auto;
+      margin-top: 20px;
     }
     .start-btn:hover {
       background-color: #23a06b;
     }
-    .section {
-      padding: 40px 20px;
-      max-width: 600px;
-      margin: 0 auto;
+    .description-container {
+      padding: 0 20px;
+      text-align: center;
+    }
+    .input-section {
+      background: #ffffff;
+      border-radius: 20px;
+      margin: 30px 20px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .input-section h2 {
+      color: #2ac179;
+      margin-top: 0;
     }
     textarea {
       width: 100%;
-      min-height: 160px;
-      font-family: 'Quicksand', sans-serif;
-      font-size: 16px;
-      padding: 15px;
+      height: 150px;
       border-radius: 10px;
       border: 1px solid #ccc;
+      padding: 10px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 16px;
+      resize: none;
       box-sizing: border-box;
-      resize: vertical;
-      background: #f9fffc;
-      color: #234f3e;
     }
-    .char-count {
+    .char-counter {
       text-align: right;
-      margin-top: 8px;
       font-size: 14px;
+      margin-top: 5px;
+      color: #555;
     }
-    .char-count.over-limit {
+    .char-counter.exceeded {
       color: red;
     }
-    .nav {
-      position: absolute;
-      top: 15px;
-      left: 20px;
-      z-index: 10;
+    .tagline {
+      font-size: 16px;
+      text-align: center;
+      color: #5b8d7a;
+      padding: 20px;
+      background: #ebfff7;
+      margin-top: auto;
     }
-    .nav button {
+    nav {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+    .menu-btn {
       background: none;
       border: none;
       font-size: 26px;
       cursor: pointer;
     }
-    .menu {
+    .nav-menu {
       display: none;
-      position: absolute;
-      top: 50px;
-      left: 20px;
       background: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 60px;
+      left: 20px;
       border-radius: 10px;
-      padding: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .menu a {
+    .nav-menu a {
       display: block;
-      padding: 10px;
+      padding: 10px 20px;
       color: #234f3e;
       text-decoration: none;
     }
-    .menu a:hover {
-      background: #eafff5;
+    .nav-menu a:hover {
+      background-color: #f0f0f0;
     }
   </style>
 </head>
 <body>
-  <div class="nav">
-    <button onclick="toggleMenu()">&#9776;</button>
-    <div class="menu" id="menu">
+  <nav>
+    <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+    <div class="nav-menu" id="navMenu">
       <a href="index.html">Home</a>
       <a href="questionnaire.html">Questionnaire</a>
-      <a href="about.html">How It Works</a>
+      <a href="about.html">How it Works</a>
       <a href="policy.html">Privacy Policy</a>
     </div>
-  </div>  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
-  <h1>Welcome to New Leaf</h1>
-  <p class="description">
-    Ready to find your perfect place to live? Start our quick questionnaire to see which U.S. cities match your lifestyle and priorities. Or, describe your dream city and let AI do the work.
-  </p>
-  <button class="start-btn" onclick="location.href='questionnaire.html'">Start Questionnaire</button>  <div class="section">
+  </nav>  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo" />
+  <h1 class="header-text">Welcome to New Leaf</h1>  <div class="start-section">
+    <div class="description-container">
+      <h2>Ready to find the perfect place to live?</h2>
+      <p>Answer a few quick questions and we’ll suggest the best cities based on your values and lifestyle.</p>
+    </div>
+    <a href="questionnaire.html"><button class="start-btn">Get Started</button></a>
+  </div>  <div class="input-section">
     <h2>Describe Your Ideal City</h2>
-    <p>Tell us what matters most. Our AI will match you with real cities based on your preferences.</p>
-    <textarea id="cityInput" maxlength="1000" placeholder="My ideal city would be..." oninput="updateCharCount()"></textarea>
-    <div id="charCount" class="char-count">0 / 1000</div>
+    <p>You can describe your dream city below, and we’ll match you to cities from our database using AI.</p>
+    <textarea id="cityInput" maxlength="1000" placeholder="My ideal city would be..." oninput="updateCounter()"></textarea>
+    <div class="char-counter" id="charCount">0 / 1000</div>
+  </div>  <div class="tagline">
+    Turn a New Leaf. Discover Your New Home.
+    <a href="policy.html" style="color: #2ac179; text-decoration: none;">Privacy Policy</a>
   </div>  <script>
     function toggleMenu() {
-      const menu = document.getElementById('menu');
+      const menu = document.getElementById('navMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
 
-    function updateCharCount() {
-      const input = document.getElementById('cityInput');
+    function updateCounter() {
+      const textarea = document.getElementById('cityInput');
       const counter = document.getElementById('charCount');
-      const length = input.value.length;
+      const length = textarea.value.length;
       counter.textContent = `${length} / 1000`;
-      counter.classList.toggle('over-limit', length > 1000);
+      counter.classList.toggle('exceeded', length > 1000);
     }
   </script></body>
 </html>
