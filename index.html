@@ -2,123 +2,158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NewLeaf</title>
+  <title>NewLeaf - Welcome</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(to bottom, #eafff5, #d0fff1);
-      color: #234f3e;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    .logo {
-      position: absolute;
-      top: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 130px;
-    }
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 40px 20px 80px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .main-content h1 {
-      font-size: 32px;
-      color: #2ac179;
-      margin-bottom: 10px;
-    }
-    .main-content .description,
-    .main-content .custom-description {
-      font-size: 18px;
-      color: #234f3e;
-      max-width: 600px;
-      line-height: 1.5;
-      margin-bottom: 30px;
-    }
-    .start-btn {
-      background-color: #2ac179;
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      font-size: 18px;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-bottom: 60px;
-    }
-    .start-btn:hover {
-      background-color: #23a06b;
-    }
-    .custom-input-area {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 600px;
-    }
-    .custom-input-area textarea {
-      width: 100%;
-      height: 150px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 16px;
-      font-family: 'Quicksand', sans-serif;
-      resize: none;
-      outline: none;
-    }
-    .custom-input-area .char-limit {
-      text-align: right;
-      font-size: 14px;
-      color: #5b8d7a;
-      margin-top: 8px;
-    }
-    .tagline {
-      font-size: 16px;
-      text-align: center;
-      color: #5b8d7a;
-      padding: 20px;
-      background: #ebfff7;
-      margin-top: auto;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(to bottom, #eafff5, #d0fff1);
+  color: #234f3e;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.logo {
+  display: block;
+  margin: 20px auto 0;
+  width: 130px;
+}
+
+.hamburger {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+nav {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+  flex-direction: column;
+}
+
+nav a {
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #234f3e;
+  border-bottom: 1px solid #ddd;
+}
+
+nav a:hover {
+  background: #ebfff7;
+}
+
+.main-content {
+  max-width: 600px;
+  margin: 60px auto 40px;
+  padding: 20px;
+  text-align: center;
+}
+
+.main-content h1 {
+  font-size: 36px;
+  color: #2ac179;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 18px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.start-btn {
+  background-color: #2ac179;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 40px;
+}
+
+.start-btn:hover {
+  background-color: #23a06b;
+}
+
+.input-section {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto 60px;
+}
+
+.input-section h2 {
+  color: #2ac179;
+  margin-bottom: 15px;
+}
+
+.input-section p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #3d7b5b;
+}
+
+.input-section textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 16px;
+  resize: vertical;
+  outline: none;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #f9fdfb;
+  color: #234f3e;
+}
+
+.tagline {
+  font-size: 16px;
+  text-align: center;
+  color: #5b8d7a;
+  padding: 20px;
+  background: #ebfff7;
+}
+
   </style>
 </head>
 <body>
-  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
-  <div class="main-content" id="homeScreen">
+  <div class="hamburger" onclick="toggleNav()">&#9776;</div>
+  <nav id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="questionnaire.html">Questionnaire</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="about.html">About</a>
+    <a href="policy.html">Privacy Policy</a>
+  </nav>  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">  <div class="main-content">
     <h1>Welcome to New Leaf</h1>
     <p class="description">
-      Discover cities that match your lifestyle, values, and dreams.
-      Our questionnaire helps us find cities that fit your needs best.
+      Discover cities that match your lifestyle, values, and dreams. You can either take a guided questionnaire or simply describe what you’re looking for.
     </p>
-    <button class="start-btn" onclick="startQuestionnaire()">Take the Questionnaire</button><p class="custom-description">
-  Prefer a personalized approach? Describe your ideal city below, and we'll suggest a match using AI.
-</p>
-<div class="custom-input-area">
-  <textarea maxlength="1000" placeholder="My ideal city would be..."></textarea>
-  <div class="char-limit">Max 1000 characters</div>
-</div>
-
+    <button class="start-btn" onclick="window.location.href='questionnaire.html'">Take the Questionnaire</button>
+  </div>  <div class="input-section" id="how-it-works">
+    <h2>Describe Your Ideal City</h2>
+    <p>Tell us what matters most to you — climate, culture, size, community, anything! We’ll translate your vision into personalized city suggestions.</p>
+    <textarea maxlength="1000" placeholder="My ideal city would be..."></textarea>
   </div>  <div class="tagline">
     Turn a New Leaf. Discover Your New Home.
-    <a href="policy.html" style="color: #2ac179; text-decoration: none;">Privacy Policy</a>
   </div>  <script>
-    function startQuestionnaire() {
-      // Redirect to questionnaire.html or show questionnaire section
-      window.location.href = 'questionnaire.html';
+    function toggleNav() {
+      const nav = document.getElementById('navMenu');
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
     }
   </script></body>
 </html>
