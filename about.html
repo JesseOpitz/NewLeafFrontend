@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About - NewLeaf</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - New Leaf</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
     body {
@@ -12,80 +12,123 @@
       font-family: 'Quicksand', sans-serif;
       background: linear-gradient(to bottom, #eafff5, #d0fff1);
       color: #234f3e;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      position: relative;
     }
-    .logo {
-      position: absolute;
-      top: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 130px;
-      z-index: 1;
-    }
-    .hamburger {
-      position: absolute;
-      top: 15px;
+
+    nav {
+      position: fixed;
+      top: 20px;
       left: 20px;
+      z-index: 10;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
       font-size: 28px;
       cursor: pointer;
-      color: #2ac179;
-      z-index: 2;
+      z-index: 11;
     }
+
     .nav-menu {
-      position: absolute;
-      top: 60px;
-      left: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      display: none;
-      flex-direction: column;
-      padding: 10px;
-      z-index: 3;
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 220px;
+      background: #fff;
+      height: 100%;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+      border-radius: 0 10px 10px 0;
+      transition: left 0.3s ease;
+      padding-top: 60px;
+      z-index: 10;
     }
+
+    .nav-menu.open {
+      left: 0;
+    }
+
     .nav-menu a {
-      padding: 10px;
-      text-decoration: none;
+      display: block;
+      padding: 15px 20px;
       color: #234f3e;
-      font-weight: bold;
+      text-decoration: none;
     }
+
     .nav-menu a:hover {
-      background: #ebfff7;
-      border-radius: 6px;
+      background-color: #f0f0f0;
     }
-    .about-content {
-      padding: 120px 20px 40px;
-      max-width: 700px;
-      margin: 0 auto;
-      text-align: left;
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 9;
     }
-    .about-content h1 {
-      font-size: 28px;
-      color: #2ac179;
-      margin-bottom: 20px;
+
+    #overlay.active {
+      display: block;
+    }
+
+    .logo {
+      display: block;
+      width: 130px;
+      margin: 20px auto 10px;
+      cursor: pointer;
+    }
+
+    .content {
+      max-width: 800px;
+      background: #ffffff;
+      margin: 0 auto 40px;
+      padding: 30px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+    }
+
+    h1 {
       text-align: center;
+      color: #2ac179;
+      margin-top: 0;
     }
-    .about-content p {
+
+    p {
       font-size: 17px;
       line-height: 1.6;
-      color: #234f3e;
       margin-bottom: 20px;
+    }
+
+    a {
+      color: #2ac179;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
-  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
+  <nav>
+    <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+  </nav>
   <div class="nav-menu" id="navMenu">
     <a href="index.html">Home</a>
     <a href="questionnaire.html">Questionnaire</a>
     <a href="about.html">How it Works</a>
     <a href="policy.html">Privacy Policy</a>
   </div>
+  <div id="overlay" onclick="closeMenu()"></div>
 
-  <div class="about-content">
+  <a href="index.html">
+    <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo" />
+  </a>
+
+  <div class="content">
     <h1>How It Works</h1>
     <p>
       At New Leaf, we've built a powerful recommendation engine that combines your personal preferences with extensive data about cities across the United States. Our scoring algorithm evaluates factors like cost of living, crime rates, walkability, remote work readiness, diversity, and more—each pulled from trustworthy public data sources such as the U.S. Census Bureau, the Bureau of Labor Statistics, FBI Uniform Crime Reporting, and independent walkability indices.
@@ -97,8 +140,21 @@
 
   <script>
     function toggleMenu() {
-      const nav = document.getElementById("navMenu");
-      nav.style.display = nav.style.display === "flex" ? "none" : "flex";
+      const menu = document.getElementById('navMenu');
+      const overlay = document.getElementById('overlay');
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('active');
+      }
+    }
+
+    function closeMenu() {
+      document.getElementById('navMenu').classList.remove('open');
+      document.getElementById('overlay').classList.remove('active');
     }
   </script>
 </body>
