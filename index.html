@@ -237,36 +237,36 @@
     }
 
     async function submitCityDescription() {
-  const text = document.getElementById('cityInput').value.trim();
-  if (!text) {
-    alert("Please describe your ideal city.");
-    return;
-  }
+      const text = document.getElementById('cityInput').value.trim();
+      if (!text) {
+        alert("Please describe your ideal city.");
+        return;
+      }
 
-  try {
-    const res = await fetch('https://raw.githubusercontent.com/JesseOpitz/New-Leaf/describe.py', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ description: text })
-    });
+      try {
+        const res = await fetch('https://raw.githubusercontent.com/JesseOpitz/New-Leaf/describe.py', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: text })
+        });
+ 
+        const data = await res.json();
 
-    const data = await res.json();
+        if (!res.ok) {
+          alert(data.error || "Failed to process your description.");
+         return;
+        }
 
-    if (!res.ok) {
-      alert(data.error || "Failed to process your description.");
-      return;
-    }
+        localStorage.setItem('aiGeneratedScores', JSON.stringify(data.scores));
+        localStorage.setItem('aiSummaryText', data.summary);
+        localStorage.setItem('skipToFinalSlide', 'true');
 
-    localStorage.setItem('aiGeneratedScores', JSON.stringify(data.scores));
-    localStorage.setItem('aiSummaryText', data.summary);
-    localStorage.setItem('skipToFinalSlide', 'true');
-
-    window.location.href = 'questionnaire.html';
-  } catch (err) {
-    alert("Something went wrong. Try again.");
-    console.error(err);
-  }
-    }
+        window.location.href = 'questionnaire.html';
+      } catch (err) {
+        alert("Something went wrong. Try again.");
+        console.error(err);
+      }
+        }
   </script>
 </body>
 </html>
