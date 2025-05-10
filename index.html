@@ -244,7 +244,7 @@
   }
 
   try {
-    const res = await fetch('https://your-backend-url/describe', {
+    const res = await fetch('https://raw.githubusercontent.com/JesseOpitz/New-Leaf/describe.py', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ description: text })
