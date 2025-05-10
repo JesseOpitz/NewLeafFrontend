@@ -468,7 +468,7 @@ async function submitAnswers() {
           const wikiLink = city.Wikipedia_URL || '#';  
           const card = document.createElement('div');  
           card.className = 'city-card avoid-card';  
-          card.innerHTML = `<h3>${city.city}, ${city.state}</h3><img class=\"city-thumbnail\" src=\"${imgSrc}\" alt=\"${city.city}\"><p>${city.positive}</p><a href=\"${wikiLink}\" target=\"_blank\">Learn more</a>`;  
+          card.innerHTML = `<h3>${city.city}, ${city.state}</h3><img class=\"city-thumbnail\" src=\"${imgSrc}\" alt=\"${city.city}\"><p>${city.negative}</p><a href=\"${wikiLink}\" target=\"_blank\">Learn more</a>`;  
           resultsDiv.appendChild(card);  
         }  
       }  
