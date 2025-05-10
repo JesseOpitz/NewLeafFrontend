@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>  <html lang="en">  
 <head>  
   <meta charset="UTF-8" />  
@@ -296,7 +295,9 @@
       border-radius: 12px;  
     }  
   </style>  
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5951831012865909" crossorigin="anonymous"></script>  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5951831012865909" crossorigin="anonymous">
+    const formatName = str => String(str).trim().replace(/\s+/g, '_');
+  </script>  
 </head>  
 <body>  
 <nav>
@@ -450,7 +451,7 @@ async function submitAnswers() {
 
       for (const city of data.good_matches) {  
         const formatName = str => str.trim().toLowerCase().replace(/\s+/g, '_');
-        const imageName = `${city.city}_${city.state}`.replace(/\\s+/g, '_') + '.jpg';  
+        const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
         const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;  
         const wikiLink = city.Wikipedia_URL || '#';  
         const card = document.createElement('div');  
