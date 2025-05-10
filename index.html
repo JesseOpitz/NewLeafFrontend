@@ -236,13 +236,36 @@
       counter.classList.toggle('exceeded', length > 1000);
     }
 
-    function submitCityDescription() {
-      const text = document.getElementById('cityInput').value.trim();
-      if (!text) {
-        alert("Please describe your ideal city.");
-        return;
-      }
-      alert("Description submitted: " + text);
+    async function submitCityDescription() {
+  const text = document.getElementById('cityInput').value.trim();
+  if (!text) {
+    alert("Please describe your ideal city.");
+    return;
+  }
+
+  try {
+    const res = await fetch('https://your-backend-url/describe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: text })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Failed to process your description.");
+      return;
+    }
+
+    localStorage.setItem('aiGeneratedScores', JSON.stringify(data.scores));
+    localStorage.setItem('aiSummaryText', data.summary);
+    localStorage.setItem('skipToFinalSlide', 'true');
+
+    window.location.href = 'questionnaire.html';
+  } catch (err) {
+    alert("Something went wrong. Try again.");
+    console.error(err);
+  }
     }
   </script>
 </body>
