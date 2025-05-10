@@ -481,6 +481,22 @@ document.getElementById('carousel').style.display = 'flex';
 questions.forEach((q, i) => slides.appendChild(createSliderSlide(q, i)));  
 slides.appendChild(createFinalSlide());
 
+if (localStorage.getItem('skipToFinalSlide') === 'true') {
+  localStorage.removeItem('skipToFinalSlide');
+
+  // Pre-fill answers if available
+  const autoAnswers = JSON.parse(localStorage.getItem('aiGeneratedScores') || '[]');
+  if (autoAnswers.length === 8) {
+    autoAnswers.forEach((val, idx) => {
+      answers[idx] = val;
+    });
+  }
+
+  // Jump to final slide
+  currentSlide = slides.children.length - 1;
+  slides.style.transform = `translateX(-${100 * currentSlide}%)`;
+}
+    
 function toggleMenu() {
   const menu = document.getElementById('navMenu');
   const overlay = document.getElementById('overlay');
