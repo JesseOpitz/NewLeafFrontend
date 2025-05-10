@@ -452,6 +452,7 @@ async function submitAnswers() {
       for (const city of data.good_matches) {  
         const formatName = str => str.trim().toLowerCase().replace(/\s+/g, '_');
         const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
+        alert("Trying to load image: " + imageName); //DELETE
         const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;  
         const wikiLink = city.Wikipedia_URL || '#';  
         const card = document.createElement('div');  
