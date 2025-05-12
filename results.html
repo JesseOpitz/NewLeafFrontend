@@ -3,115 +3,281 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clean Card Layout</title>
+  <title>NewLeaf Results</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
     * {
       box-sizing: border-box;
+    }
+    body {
       margin: 0;
-      padding: 0;
-    }
-
-    body, html {
-      font-family: sans-serif;
-      background-color: #f5f5f5;
-      height: 100%;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom, #eafff5, #d0fff1);
+      color: #234f3e;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-
-    header {
-      background-color: white;
-      padding: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid #eee;
+    .logo-container {
+      width: 100%;
+      text-align: center;
+      padding: 24px 0 10px;
     }
-
-    .container {
+    .logo {
+      width: 130px;
+    }
+    .carousel {
+      width: 90%;
+      max-width: 450px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      padding: 20px;
+      margin-bottom: 40px;
+      min-height: 500px;
+      transition: background-color 0.3s ease;
+    }
+    .carousel-slide {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      min-height: 420px;
       flex: 1;
+      justify-content: space-between;
+    }
+    .carousel-slide.active {
+      display: flex;
+    }
+    .carousel-slide.avoid {
+      background-color: #fff5f5;
+      border-radius: 20px;
+      padding: 10px 12px;
+    }
+    .slide-content {
       display: flex;
       flex-direction: column;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 1rem;
+      justify-content: space-between;
+      flex: 1;
+      width: 100%;
     }
-
-    .card-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .card {
-      background-color: #e60023; /* consistent red */
-      color: white;
-      padding: 1rem;
+    .city-thumbnail {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
       border-radius: 12px;
-      flex: 1 1 calc(33.33% - 1rem);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      opacity: 0;
-      transform: scale(0.95);
+      margin: 16px 0;
     }
-
-    .card.visible {
-      opacity: 1;
-      transform: scale(1);
+    .carousel h2 {
+      font-size: 22px;
+      color: #2ac179;
+      margin-bottom: 12px;
     }
-
-    .show-more-button {
+    .carousel p {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .carousel a {
       margin-top: auto;
-      align-self: center;
-      background-color: #e60023;
+      font-size: 14px;
+      font-weight: bold;
+      color: #2ac179;
+      text-decoration: none;
+    }
+    .carousel a:hover {
+      text-decoration: underline;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .nav-buttons button {
+      background: #2ac179;
       color: white;
       border: none;
-      padding: 0.75rem 2rem;
-      border-radius: 8px;
-      font-size: 1rem;
+      padding: 10px 20px;
+      font-size: 15px;
+      border-radius: 16px;
       cursor: pointer;
-      position: sticky;
-      bottom: 0;
-      margin-bottom: 1rem;
-      z-index: 5;
+      transition: background 0.3s ease;
+    }
+    .nav-buttons button:hover {
+      background: #23a06b;
+    }
+    .nav-buttons button:disabled {
+      visibility: hidden;
+    }
+    .spinner {
+      margin-top: 80px;
+      width: 48px;
+      height: 48px;
+      border: 5px solid #cdebe2;
+      border-top: 5px solid #2ac179;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
 <body>
+  <div class="logo-container">
+    <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
+  </div>
 
-  <header>
-    <h1>Card Layout</h1>
-  </header>
-
-  <div class="container">
-    <div class="card-list" id="cardList">
-      <!-- Example cards -->
-      <div class="card">Card 1</div>
-      <div class="card">Card 2</div>
-      <div class="card">Card 3</div>
-    </div>
-
-    <button class="show-more-button" onclick="showMore()">Show More</button>
+  <div class="carousel" id="carousel">
+    <div class="spinner" id="loadingSpinner"></div>
   </div>
 
   <script>
-    function showMore() {
-      const list = document.getElementById('cardList');
-      for (let i = 4; i <= 6; i++) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.textContent = `Card ${i}`;
-        list.appendChild(card);
-        // Force reflow for animation
-        requestAnimationFrame(() => card.classList.add('visible'));
+    const formatName = str => String(str).trim().replace(/\s+/g, '_');
+    const answers = JSON.parse(localStorage.getItem('questionnaireAnswers') || '[]');
+    const carousel = document.getElementById('carousel');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    let slides = [];
+    let currentIndex = 0;
+
+    function createSlide(title, description = '', img = '', link = '', isAvoid = false) {
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide';
+      if (isAvoid) slide.classList.add('avoid');
+
+      const content = document.createElement('div');
+      content.className = 'slide-content';
+
+      const h2 = document.createElement('h2');
+      h2.textContent = title;
+      content.appendChild(h2);
+
+      if (img) {
+        const image = document.createElement('img');
+        image.src = img;
+        image.className = 'city-thumbnail';
+        image.alt = title;
+        content.appendChild(image);
+      }
+
+      if (description) {
+        const p = document.createElement('p');
+        p.textContent = description;
+        content.appendChild(p);
+      }
+
+      if (link) {
+        const a = document.createElement('a');
+        a.href = link;
+        a.textContent = 'Learn more';
+        a.target = '_blank';
+        content.appendChild(a);
+      }
+
+      slide.appendChild(content);
+      return slide;
+    }
+
+    function updateCarousel() {
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === currentIndex);
+      });
+      document.getElementById('backBtn').disabled = currentIndex === 0;
+      document.getElementById('nextBtn').disabled = currentIndex === slides.length - 1;
+    }
+
+    function setupButtons() {
+      const nav = document.createElement('div');
+      nav.className = 'nav-buttons';
+
+      const backBtn = document.createElement('button');
+      backBtn.textContent = 'Back';
+      backBtn.id = 'backBtn';
+      backBtn.onclick = () => {
+        if (currentIndex > 0) currentIndex--;
+        updateCarousel();
+      };
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = 'Next';
+      nextBtn.id = 'nextBtn';
+      nextBtn.onclick = () => {
+        if (currentIndex < slides.length - 1) currentIndex++;
+        updateCarousel();
+      };
+
+      nav.appendChild(backBtn);
+      nav.appendChild(nextBtn);
+      carousel.appendChild(nav);
+    }
+
+    async function fetchAndRender() {
+      if (answers.length < 9) {
+        carousel.innerHTML = '<p>Error: Missing answers. Please return to the questionnaire.</p>';
+        return;
+      }
+
+      try {
+        const res = await fetch('https://new-leaf.onrender.com/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ answers })
+        });
+        const data = await res.json();
+
+        // Hide spinner
+        loadingSpinner.remove();
+
+        // Slide 1: Intro
+        slides.push(createSlide(
+          'Your Personalized Results',
+          'Based on your input, here are the cities we recommend for your lifestyle preferences.'
+        ));
+
+        // Good Matches
+        for (const city of data.good_matches) {
+          const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
+          const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;
+          const wikiLink = city.Wikipedia_URL || '#';
+          slides.push(createSlide(`${city.city}, ${city.state}`, city.positive, imgSrc, wikiLink));
+        }
+
+        const showAvoid = answers[answers.length - 1];
+        if (showAvoid && data.bad_matches && data.bad_matches.length) {
+          slides.push(createSlide(
+            'Cities to Avoid',
+            'These cities may not be a good fit for your preferences based on your input.'
+          ));
+
+          for (const city of data.bad_matches) {
+            const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
+            const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;
+            const wikiLink = city.Wikipedia_URL || '#';
+            slides.push(createSlide(`${city.city}, ${city.state}`, city.negative, imgSrc, wikiLink, true));
+          }
+        }
+
+        slides.forEach(slide => carousel.insertBefore(slide, carousel.lastChild));
+        slides[0].classList.add('active');
+        setupButtons();
+        updateCarousel();
+
+      } catch (err) {
+        console.error(err);
+        carousel.innerHTML = '<p>There was a problem fetching your results. Please try again later.</p>';
       }
     }
 
-    // Initial reveal
-    document.querySelectorAll('.card').forEach(card =>
-      requestAnimationFrame(() => card.classList.add('visible'))
-    );
+    fetchAndRender();
   </script>
-
 </body>
 </html>
