@@ -6,9 +6,8 @@
   <title>NewLeaf Results</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: 'Quicksand', sans-serif;
@@ -27,13 +26,14 @@
       left: 20px;
       z-index: 20;
     }
+
     .menu-btn {
       background: none;
       border: none;
       font-size: 28px;
       cursor: pointer;
-      z-index: 21;
     }
+
     .nav-menu {
       position: fixed;
       top: 0;
@@ -47,18 +47,20 @@
       padding-top: 60px;
       z-index: 21;
     }
-    .nav-menu.open {
-      left: 0;
-    }
+
+    .nav-menu.open { left: 0; }
+
     .nav-menu a {
       display: block;
       padding: 15px 20px;
       color: #234f3e;
       text-decoration: none;
     }
+
     .nav-menu a:hover {
       background-color: #f0f0f0;
     }
+
     #overlay {
       display: none;
       position: fixed;
@@ -69,9 +71,8 @@
       background: transparent;
       z-index: 20;
     }
-    #overlay.active {
-      display: block;
-    }
+
+    #overlay.active { display: block; }
 
     .logo-container {
       width: 100%;
@@ -79,6 +80,7 @@
       padding: 24px 0 10px;
       z-index: 1;
     }
+
     .logo {
       width: 130px;
     }
@@ -104,34 +106,19 @@
       background-color: #fff5f5;
     }
 
-    .carousel-slide {
-      position: absolute;
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease;
       width: 100%;
-      opacity: 0;
-      transform: translateX(100%);
-      transition: all 0.5s ease;
+    }
+
+    .carousel-slide {
+      flex: 0 0 100%;
+      padding: 0 10px;
       text-align: center;
     }
 
-    .carousel-slide.left-enter {
-      transform: translateX(-100%);
-    }
-
-    .carousel-slide.right-enter {
-      transform: translateX(100%);
-    }
-
-    .carousel-slide.active {
-      position: relative;
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .carousel-slide.avoid {
-      background-color: transparent;
-    }
-
-    .slide-content {
+    .carousel-slide .slide-content {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -197,7 +184,7 @@
     }
 
     .spinner {
-      margin-top: 80px;
+      margin: 80px auto;
       width: 48px;
       height: 48px;
       border: 5px solid #cdebe2;
@@ -231,21 +218,27 @@
 
   <div class="carousel" id="carousel">
     <div class="spinner" id="loadingSpinner"></div>
+    <div class="slides" id="slides"></div>
+    <div class="nav-buttons">
+      <button id="backBtn">Back</button>
+      <button id="nextBtn">Next</button>
+    </div>
   </div>
 
   <script>
     const formatName = str => String(str).trim().replace(/\s+/g, '_');
     const answers = JSON.parse(localStorage.getItem('questionnaireAnswers') || '[]');
     const carousel = document.getElementById('carousel');
+    const slidesWrapper = document.getElementById('slides');
     const loadingSpinner = document.getElementById('loadingSpinner');
-    let slides = [];
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
     let currentIndex = 0;
-    let previousIndex = 0;
+    let slideData = [];
 
     function createSlide(title, description = '', img = '', link = '', isAvoid = false) {
       const slide = document.createElement('div');
       slide.className = 'carousel-slide';
-      if (isAvoid) slide.classList.add('avoid');
 
       const content = document.createElement('div');
       content.className = 'slide-content';
@@ -277,87 +270,52 @@
       }
 
       slide.appendChild(content);
+      if (isAvoid) slide.dataset.avoid = 'true';
       return slide;
     }
 
     function updateCarousel() {
-      slides.forEach((s, i) => {
-        s.classList.remove('active', 'left-enter', 'right-enter');
-      });
+      const offset = -currentIndex * 100;
+      slidesWrapper.style.transform = `translateX(${offset}%)`;
 
-      const newSlide = slides[currentIndex];
-      const isMovingLeft = currentIndex < previousIndex;
-
-      if (isMovingLeft) {
-        newSlide.classList.add('left-enter');
-      } else {
-        newSlide.classList.add('right-enter');
-      }
-
-      setTimeout(() => {
-        newSlide.classList.add('active');
-      }, 10);
-
-      carousel.classList.toggle('red-bg', newSlide.classList.contains('avoid'));
-
-      document.getElementById('backBtn').disabled = currentIndex === 0;
-      document.getElementById('nextBtn').disabled = currentIndex === slides.length - 1;
-
-      previousIndex = currentIndex;
+      const activeSlide = slidesWrapper.children[currentIndex];
+      carousel.classList.toggle('red-bg', activeSlide?.dataset.avoid === 'true');
+      backBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === slidesWrapper.children.length - 1;
     }
 
     function setupButtons() {
-      const nav = document.createElement('div');
-      nav.className = 'nav-buttons';
-
-      const backBtn = document.createElement('button');
-      backBtn.textContent = 'Back';
-      backBtn.id = 'backBtn';
       backBtn.onclick = () => {
         if (currentIndex > 0) {
-          previousIndex = currentIndex;
           currentIndex--;
           updateCarousel();
         }
       };
 
-      const nextBtn = document.createElement('button');
-      nextBtn.textContent = 'Next';
-      nextBtn.id = 'nextBtn';
       nextBtn.onclick = () => {
-        if (currentIndex < slides.length - 1) {
-          previousIndex = currentIndex;
+        if (currentIndex < slidesWrapper.children.length - 1) {
           currentIndex++;
           updateCarousel();
         }
       };
-
-      nav.appendChild(backBtn);
-      nav.appendChild(nextBtn);
-      carousel.appendChild(nav);
     }
 
     function setupSwipe() {
       let startX = 0;
-
-      carousel.addEventListener('touchstart', e => {
+      slidesWrapper.addEventListener('touchstart', e => {
         startX = e.touches[0].clientX;
       });
 
-      carousel.addEventListener('touchend', e => {
+      slidesWrapper.addEventListener('touchend', e => {
         const endX = e.changedTouches[0].clientX;
         const diff = endX - startX;
-
         if (Math.abs(diff) > 50) {
-          if (diff < 0 && currentIndex < slides.length - 1) {
-            previousIndex = currentIndex;
+          if (diff < 0 && currentIndex < slidesWrapper.children.length - 1) {
             currentIndex++;
-            updateCarousel();
           } else if (diff > 0 && currentIndex > 0) {
-            previousIndex = currentIndex;
             currentIndex--;
-            updateCarousel();
           }
+          updateCarousel();
         }
       });
     }
@@ -375,41 +333,28 @@
           body: JSON.stringify({ answers })
         });
         const data = await res.json();
-
         loadingSpinner.remove();
 
-        slides.push(createSlide(
-          'Your Personalized Results',
-          'Based on your input, here are the cities we recommend for your lifestyle preferences.'
-        ));
+        slideData.push(createSlide('Your Personalized Results', 'Based on your input, here are the cities we recommend for your lifestyle preferences.'));
 
         for (const city of data.good_matches) {
-          const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
-          const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;
-          const wikiLink = city.Wikipedia_URL || '#';
-          slides.push(createSlide(`${city.city}, ${city.state}`, city.positive, imgSrc, wikiLink));
+          const img = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${formatName(city.city)}_${formatName(city.state)}.jpg`;
+          slideData.push(createSlide(`${city.city}, ${city.state}`, city.positive, img, city.Wikipedia_URL || '#'));
         }
 
         const showAvoid = answers[answers.length - 1];
-        if (showAvoid && data.bad_matches && data.bad_matches.length) {
-          slides.push(createSlide(
-            'Cities to Avoid',
-            'These cities may not be a good fit for your preferences based on your input.'
-          ));
-
+        if (showAvoid && data.bad_matches.length) {
+          slideData.push(createSlide('Cities to Avoid', 'These cities may not align with your preferences.'));
           for (const city of data.bad_matches) {
-            const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
-            const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;
-            const wikiLink = city.Wikipedia_URL || '#';
-            slides.push(createSlide(`${city.city}, ${city.state}`, city.negative, imgSrc, wikiLink, true));
+            const img = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${formatName(city.city)}_${formatName(city.state)}.jpg`;
+            slideData.push(createSlide(`${city.city}, ${city.state}`, city.negative, img, city.Wikipedia_URL || '#', true));
           }
         }
 
-        slides.forEach(slide => carousel.insertBefore(slide, carousel.lastChild));
+        slideData.forEach(slide => slidesWrapper.appendChild(slide));
+        updateCarousel();
         setupButtons();
         setupSwipe();
-        updateCarousel();
-
       } catch (err) {
         console.error(err);
         carousel.innerHTML = '<p>There was a problem fetching your results. Please try again later.</p>';
@@ -417,10 +362,8 @@
     }
 
     function toggleMenu() {
-      const menu = document.getElementById('navMenu');
-      const overlay = document.getElementById('overlay');
-      menu.classList.toggle('open');
-      overlay.classList.toggle('active');
+      document.getElementById('navMenu').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('active');
     }
 
     function closeMenu() {
