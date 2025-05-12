@@ -42,6 +42,10 @@
       margin-bottom: 40px;
       min-height: 500px;
       transition: background-color 0.3s ease;
+      touch-action: pan-y;
+    }
+    .carousel.red-bg {
+      background-color: #fff5f5;
     }
     .carousel-slide {
       display: none;
@@ -57,9 +61,7 @@
       display: flex;
     }
     .carousel-slide.avoid {
-      background-color: #fff5f5;
-      border-radius: 20px;
-      padding: 10px 12px;
+      background-color: transparent;
     }
     .slide-content {
       display: flex;
@@ -189,8 +191,13 @@
 
     function updateCarousel() {
       slides.forEach((s, i) => {
-        s.classList.toggle('active', i === currentIndex);
+        const isActive = i === currentIndex;
+        s.classList.toggle('active', isActive);
+        if (isActive) {
+          carousel.classList.toggle('red-bg', s.classList.contains('avoid'));
+        }
       });
+
       document.getElementById('backBtn').disabled = currentIndex === 0;
       document.getElementById('nextBtn').disabled = currentIndex === slides.length - 1;
     }
@@ -218,6 +225,28 @@
       nav.appendChild(backBtn);
       nav.appendChild(nextBtn);
       carousel.appendChild(nav);
+    }
+
+    function setupSwipe() {
+      let startX = 0;
+
+      carousel.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+      });
+
+      carousel.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = endX - startX;
+
+        if (Math.abs(diff) > 50) {
+          if (diff < 0 && currentIndex < slides.length - 1) {
+            currentIndex++;
+          } else if (diff > 0 && currentIndex > 0) {
+            currentIndex--;
+          }
+          updateCarousel();
+        }
+      });
     }
 
     async function fetchAndRender() {
@@ -269,6 +298,7 @@
         slides.forEach(slide => carousel.insertBefore(slide, carousel.lastChild));
         slides[0].classList.add('active');
         setupButtons();
+        setupSwipe();
         updateCarousel();
 
       } catch (err) {
