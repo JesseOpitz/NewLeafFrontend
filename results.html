@@ -17,14 +17,20 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      overflow: hidden;
-      padding: 20px;
+      overflow-x: hidden;
+    }
+    .logo-container {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(to bottom, #eafff5, #d0fff1);
+      width: 100%;
+      text-align: center;
+      padding: 16px 0;
+      z-index: 10;
     }
     .logo {
       width: 130px;
-      margin-bottom: 20px;
     }
     .carousel {
       width: 90%;
@@ -38,15 +44,22 @@
       align-items: center;
       position: relative;
       padding: 20px;
+      margin-top: 10px;
+      min-height: 500px;
     }
     .carousel-slide {
       display: none;
       flex-direction: column;
       align-items: center;
       text-align: center;
+      width: 100%;
+      min-height: 400px;
     }
     .carousel-slide.active {
       display: flex;
+    }
+    .carousel-slide.avoid {
+      background-color: #ffeaea;
     }
     .city-thumbnail {
       width: 100%;
@@ -96,23 +109,44 @@
     .nav-buttons button:disabled {
       visibility: hidden;
     }
+    .spinner {
+      margin-top: 60px;
+      width: 48px;
+      height: 48px;
+      border: 5px solid #cdebe2;
+      border-top: 5px solid #2ac179;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 <body>
-  <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
-  <div class="carousel" id="carousel"></div>
+  <div class="logo-container">
+    <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
+  </div>
+
+  <div class="carousel" id="carousel">
+    <div class="spinner" id="loadingSpinner"></div>
+  </div>
 
   <script>
     const formatName = str => String(str).trim().replace(/\s+/g, '_');
 
     const answers = JSON.parse(localStorage.getItem('questionnaireAnswers') || '[]');
     const carousel = document.getElementById('carousel');
+    const loadingSpinner = document.getElementById('loadingSpinner');
     let slides = [];
     let currentIndex = 0;
 
-    function createSlide(title, description = '', img = '', link = '') {
+    function createSlide(title, description = '', img = '', link = '', isAvoid = false) {
       const slide = document.createElement('div');
       slide.className = 'carousel-slide';
+      if (isAvoid) slide.classList.add('avoid');
       const h2 = document.createElement('h2');
       h2.textContent = title;
       slide.appendChild(h2);
@@ -189,6 +223,9 @@
         });
         const data = await res.json();
 
+        // Hide spinner
+        loadingSpinner.remove();
+
         // Slide 1: Intro
         slides.push(createSlide(
           'Your Personalized Results',
@@ -203,24 +240,23 @@
           slides.push(createSlide(`${city.city}, ${city.state}`, city.positive, imgSrc, wikiLink));
         }
 
-        // Optional: Avoid Matches intro
         const showAvoid = answers[answers.length - 1];
         if (showAvoid && data.bad_matches && data.bad_matches.length) {
           slides.push(createSlide(
             'Cities to Avoid',
-            'Based on your input, these cities may not align well with your preferences.'
+            'These cities may not be a good fit for your preferences based on your input.'
           ));
 
           for (const city of data.bad_matches) {
             const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
             const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;
             const wikiLink = city.Wikipedia_URL || '#';
-            slides.push(createSlide(`${city.city}, ${city.state}`, city.negative, imgSrc, wikiLink));
+            slides.push(createSlide(`${city.city}, ${city.state}`, city.negative, imgSrc, wikiLink, true));
           }
         }
 
         // Add slides to DOM
-        slides.forEach(slide => carousel.appendChild(slide));
+        slides.forEach(slide => carousel.insertBefore(slide, carousel.lastChild));
         slides[0].classList.add('active');
 
         setupButtons();
