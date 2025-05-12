@@ -99,7 +99,7 @@
       margin-bottom: 40px;
       min-height: 500px;
       transition: background-color 0.3s ease;
-      overflow: hidden;
+      overflow: hidden; /* Key fix */
     }
 
     .carousel.red-bg {
@@ -114,7 +114,6 @@
 
     .carousel-slide {
       flex: 0 0 100%;
-      padding: 0 10px;
       text-align: center;
     }
 
@@ -194,9 +193,7 @@
     }
 
     @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -277,7 +274,6 @@
     function updateCarousel() {
       const offset = -currentIndex * 100;
       slidesWrapper.style.transform = `translateX(${offset}%)`;
-
       const activeSlide = slidesWrapper.children[currentIndex];
       carousel.classList.toggle('red-bg', activeSlide?.dataset.avoid === 'true');
       backBtn.disabled = currentIndex === 0;
