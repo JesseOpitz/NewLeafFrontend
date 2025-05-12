@@ -20,14 +20,69 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
+
+    nav {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 20;
+    }
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 21;
+    }
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 220px;
+      background: #fff;
+      height: 100%;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+      border-radius: 0 10px 10px 0;
+      transition: left 0.3s ease;
+      padding-top: 60px;
+      z-index: 21;
+    }
+    .nav-menu.open {
+      left: 0;
+    }
+    .nav-menu a {
+      display: block;
+      padding: 15px 20px;
+      color: #234f3e;
+      text-decoration: none;
+    }
+    .nav-menu a:hover {
+      background-color: #f0f0f0;
+    }
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: transparent;
+      z-index: 20;
+    }
+    #overlay.active {
+      display: block;
+    }
+
     .logo-container {
       width: 100%;
       text-align: center;
       padding: 24px 0 10px;
+      z-index: 1;
     }
     .logo {
       width: 130px;
     }
+
     .carousel {
       width: 90%;
       max-width: 450px;
@@ -42,34 +97,37 @@
       margin-bottom: 40px;
       min-height: 500px;
       transition: background-color 0.3s ease;
-      touch-action: pan-y;
+      overflow: hidden;
     }
+
     .carousel.red-bg {
       background-color: #fff5f5;
     }
+
     .carousel-slide {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 100%;
-      min-height: 420px;
-      flex: 1;
-      justify-content: space-between;
+      min-width: 100%;
+      position: absolute;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .carousel-slide.active {
-      display: flex;
+      position: relative;
+      transform: translateX(0%);
+      opacity: 1;
     }
     .carousel-slide.avoid {
       background-color: transparent;
     }
+
     .slide-content {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      flex: 1;
+      min-height: 420px;
       width: 100%;
     }
+
     .city-thumbnail {
       width: 100%;
       max-height: 200px;
@@ -77,15 +135,18 @@
       border-radius: 12px;
       margin: 16px 0;
     }
+
     .carousel h2 {
       font-size: 22px;
       color: #2ac179;
       margin-bottom: 12px;
     }
+
     .carousel p {
       font-size: 16px;
       line-height: 1.5;
     }
+
     .carousel a {
       margin-top: auto;
       font-size: 14px;
@@ -93,15 +154,18 @@
       color: #2ac179;
       text-decoration: none;
     }
+
     .carousel a:hover {
       text-decoration: underline;
     }
+
     .nav-buttons {
       display: flex;
       justify-content: space-between;
       width: 100%;
       margin-top: 20px;
     }
+
     .nav-buttons button {
       background: #2ac179;
       color: white;
@@ -112,12 +176,15 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
+
     .nav-buttons button:hover {
       background: #23a06b;
     }
+
     .nav-buttons button:disabled {
       visibility: hidden;
     }
+
     .spinner {
       margin-top: 80px;
       width: 48px;
@@ -127,6 +194,7 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
+
     @keyframes spin {
       to {
         transform: rotate(360deg);
@@ -135,6 +203,17 @@
   </style>
 </head>
 <body>
+  <nav>
+    <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+  </nav>
+  <div class="nav-menu" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="questionnaire.html">Questionnaire</a>
+    <a href="about.html">How it Works</a>
+    <a href="policy.html">Privacy Policy</a>
+  </div>
+  <div id="overlay" onclick="closeMenu()"></div>
+
   <div class="logo-container">
     <img src="https://raw.githubusercontent.com/JesseOpitz/NewLeafFrontend/main/logo.png" class="logo" alt="NewLeaf Logo">
   </div>
@@ -191,12 +270,11 @@
 
     function updateCarousel() {
       slides.forEach((s, i) => {
-        const isActive = i === currentIndex;
-        s.classList.toggle('active', isActive);
-        if (isActive) {
-          carousel.classList.toggle('red-bg', s.classList.contains('avoid'));
-        }
+        s.classList.remove('active');
       });
+      const activeSlide = slides[currentIndex];
+      activeSlide.classList.add('active');
+      carousel.classList.toggle('red-bg', activeSlide.classList.contains('avoid'));
 
       document.getElementById('backBtn').disabled = currentIndex === 0;
       document.getElementById('nextBtn').disabled = currentIndex === slides.length - 1;
@@ -263,16 +341,13 @@
         });
         const data = await res.json();
 
-        // Hide spinner
         loadingSpinner.remove();
 
-        // Slide 1: Intro
         slides.push(createSlide(
           'Your Personalized Results',
           'Based on your input, here are the cities we recommend for your lifestyle preferences.'
         ));
 
-        // Good Matches
         for (const city of data.good_matches) {
           const imageName = `${formatName(city.city)}_${formatName(city.state)}.jpg`;
           const imgSrc = `https://raw.githubusercontent.com/JesseOpitz/New-Leaf/main/thumbnails/${imageName}`;
@@ -297,6 +372,7 @@
 
         slides.forEach(slide => carousel.insertBefore(slide, carousel.lastChild));
         slides[0].classList.add('active');
+
         setupButtons();
         setupSwipe();
         updateCarousel();
@@ -305,6 +381,24 @@
         console.error(err);
         carousel.innerHTML = '<p>There was a problem fetching your results. Please try again later.</p>';
       }
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('navMenu');
+      const overlay = document.getElementById('overlay');
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('active');
+      }
+    }
+
+    function closeMenu() {
+      document.getElementById('navMenu').classList.remove('open');
+      document.getElementById('overlay').classList.remove('active');
     }
 
     fetchAndRender();
