@@ -105,17 +105,28 @@
     }
 
     .carousel-slide {
-      min-width: 100%;
       position: absolute;
+      width: 100%;
       opacity: 0;
       transform: translateX(100%);
-      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: all 0.5s ease;
+      text-align: center;
     }
+
+    .carousel-slide.left-enter {
+      transform: translateX(-100%);
+    }
+
+    .carousel-slide.right-enter {
+      transform: translateX(100%);
+    }
+
     .carousel-slide.active {
       position: relative;
-      transform: translateX(0%);
       opacity: 1;
+      transform: translateX(0);
     }
+
     .carousel-slide.avoid {
       background-color: transparent;
     }
@@ -229,6 +240,7 @@
     const loadingSpinner = document.getElementById('loadingSpinner');
     let slides = [];
     let currentIndex = 0;
+    let previousIndex = 0;
 
     function createSlide(title, description = '', img = '', link = '', isAvoid = false) {
       const slide = document.createElement('div');
@@ -270,14 +282,28 @@
 
     function updateCarousel() {
       slides.forEach((s, i) => {
-        s.classList.remove('active');
+        s.classList.remove('active', 'left-enter', 'right-enter');
       });
-      const activeSlide = slides[currentIndex];
-      activeSlide.classList.add('active');
-      carousel.classList.toggle('red-bg', activeSlide.classList.contains('avoid'));
+
+      const newSlide = slides[currentIndex];
+      const isMovingLeft = currentIndex < previousIndex;
+
+      if (isMovingLeft) {
+        newSlide.classList.add('left-enter');
+      } else {
+        newSlide.classList.add('right-enter');
+      }
+
+      setTimeout(() => {
+        newSlide.classList.add('active');
+      }, 10);
+
+      carousel.classList.toggle('red-bg', newSlide.classList.contains('avoid'));
 
       document.getElementById('backBtn').disabled = currentIndex === 0;
       document.getElementById('nextBtn').disabled = currentIndex === slides.length - 1;
+
+      previousIndex = currentIndex;
     }
 
     function setupButtons() {
@@ -288,16 +314,22 @@
       backBtn.textContent = 'Back';
       backBtn.id = 'backBtn';
       backBtn.onclick = () => {
-        if (currentIndex > 0) currentIndex--;
-        updateCarousel();
+        if (currentIndex > 0) {
+          previousIndex = currentIndex;
+          currentIndex--;
+          updateCarousel();
+        }
       };
 
       const nextBtn = document.createElement('button');
       nextBtn.textContent = 'Next';
       nextBtn.id = 'nextBtn';
       nextBtn.onclick = () => {
-        if (currentIndex < slides.length - 1) currentIndex++;
-        updateCarousel();
+        if (currentIndex < slides.length - 1) {
+          previousIndex = currentIndex;
+          currentIndex++;
+          updateCarousel();
+        }
       };
 
       nav.appendChild(backBtn);
@@ -318,11 +350,14 @@
 
         if (Math.abs(diff) > 50) {
           if (diff < 0 && currentIndex < slides.length - 1) {
+            previousIndex = currentIndex;
             currentIndex++;
+            updateCarousel();
           } else if (diff > 0 && currentIndex > 0) {
+            previousIndex = currentIndex;
             currentIndex--;
+            updateCarousel();
           }
-          updateCarousel();
         }
       });
     }
@@ -371,8 +406,6 @@
         }
 
         slides.forEach(slide => carousel.insertBefore(slide, carousel.lastChild));
-        slides[0].classList.add('active');
-
         setupButtons();
         setupSwipe();
         updateCarousel();
@@ -386,14 +419,8 @@
     function toggleMenu() {
       const menu = document.getElementById('navMenu');
       const overlay = document.getElementById('overlay');
-      const isOpen = menu.classList.contains('open');
-      if (isOpen) {
-        menu.classList.remove('open');
-        overlay.classList.remove('active');
-      } else {
-        menu.classList.add('open');
-        overlay.classList.add('active');
-      }
+      menu.classList.toggle('open');
+      overlay.classList.toggle('active');
     }
 
     function closeMenu() {
