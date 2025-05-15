@@ -18,7 +18,6 @@
       overflow-x: hidden;
       position: relative;
     }
-
     .logo {
       display: block;
       margin: 20px auto 0;
@@ -193,17 +192,20 @@
 
   <div class="start-section">
     <div class="description-container">
-      <h2>Find Your Ideal City with AI</h2>
-      <p>Describe your dream city below and we’ll match you to real U.S. cities based on your values and lifestyle.</p>
+      <h2>Ready to find the perfect place to live?</h2>
+      <p>Answer a few quick questions and we’ll suggest the best cities based on your values and lifestyle.</p>
     </div>
+    <a href="questionnaire.html"><button class="start-btn">Get Started</button></a>
   </div>
+
+  <div class="divider">— or —</div>
 
   <div class="input-section">
     <h2>Describe Your Ideal City</h2>
-    <p>You can mention things like walkability, affordability, diversity, safety, political vibe, etc.</p>
+    <p>You can describe your dream city below, and we’ll match you to cities from our database using AI.</p>
     <textarea id="cityInput" maxlength="1000" placeholder="My ideal city would be..." oninput="updateCounter()"></textarea>
     <div class="char-counter" id="charCount">0 / 1000</div>
-    <button class="submit-btn" onclick="submitCityDescription()">Find My Matches</button>
+    <button class="submit-btn" onclick="submitCityDescription()">Submit</button>
   </div>
 
   <script>
@@ -247,13 +249,21 @@
           body: JSON.stringify({ description: text })
         });
 
-        const data = await res.json();
+        let data;
+        try {
+          data = await res.json();
+        } catch (err) {
+          console.error("Invalid JSON from server:", err);
+          alert("Unexpected response from server.");
+          return;
+        }
 
         if (!res.ok) {
           alert(data.error || "Failed to process your description.");
           return;
         }
 
+        console.log("AI scores received:", data.scores);
         localStorage.setItem('aiGeneratedScores', JSON.stringify(data.scores));
         localStorage.setItem('aiSummaryText', data.summary);
         localStorage.setItem('skipToFinalSlide', 'true');
